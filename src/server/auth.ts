@@ -50,6 +50,7 @@ export function verifyExtensionToken(token: string): AuthContext {
   }
 
   if (!payload) {
+    logInvalidTokenDiagnostics(token);
     throw new AppError(401, "Invalid Twitch extension token");
   }
 
@@ -64,6 +65,24 @@ export function verifyExtensionToken(token: string): AuthContext {
     userId: payload.user_id,
     isUnlinked: payload.is_unlinked === true || payload.is_unlinked === "true"
   };
+}
+
+function logInvalidTokenDiagnostics(token: string) {
+  const secret = process.env.TWITCH_EXTENSION_SECRET?.trim() ?? "";
+  const decoded = jwt.decode(token, { complete: true }) as { header?: jwt.JwtHeader; payload?: TwitchJwtPayload } | null;
+
+  console.warn("Invalid Twitch extension token", {
+    tokenHeaderAlg: decoded?.header?.alg,
+    tokenHeaderTyp: decoded?.header?.typ,
+    channelId: decoded?.payload?.channel_id,
+    role: decoded?.payload?.role,
+    userIdPresent: Boolean(decoded?.payload?.user_id),
+    opaqueUserIdPresent: Boolean(decoded?.payload?.opaque_user_id),
+    exp: decoded?.payload?.exp,
+    secretPresent: Boolean(secret),
+    secretLength: secret.length,
+    decodedSecretLength: Buffer.isBuffer(decodeExtensionSecret(secret)) ? (decodeExtensionSecret(secret) as Buffer).length : null
+  });
 }
 
 export function requireExtensionAuth(req: Request, _res: Response, next: NextFunction) {

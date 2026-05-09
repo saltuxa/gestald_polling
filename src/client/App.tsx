@@ -318,7 +318,8 @@ function Shell({ title, subtitle, children }: { title: string; subtitle: string;
 function getViewMode(): ViewMode {
   const params = new URLSearchParams(window.location.search);
   const mode = params.get("mode");
-  if (mode === "dashboard" || window.location.pathname.includes("dashboard")) {
+  const path = window.location.pathname;
+  if (mode === "dashboard" || path.includes("dashboard") || path.includes("config")) {
     return "dashboard";
   }
   return "viewer";

@@ -51,7 +51,7 @@ npm run dev:token -- --role=broadcaster --userId=broadcaster-1
 Open dashboard:
 
 ```text
-http://localhost:5173/?mode=dashboard&channelId=local-channel&role=broadcaster&userId=broadcaster-1&token=PASTE_TOKEN
+http://localhost:5173/dashboard.html?channelId=local-channel&role=broadcaster&userId=broadcaster-1&token=PASTE_TOKEN
 ```
 
 Generate a viewer token:
@@ -63,7 +63,7 @@ npm run dev:token -- --role=viewer --userId=viewer-1
 Open viewer:
 
 ```text
-http://localhost:5173/?mode=viewer&channelId=local-channel&role=viewer&userId=viewer-1&token=PASTE_TOKEN
+http://localhost:5173/panel.html?channelId=local-channel&role=viewer&userId=viewer-1&token=PASTE_TOKEN
 ```
 
 ## Checks

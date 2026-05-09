@@ -22,10 +22,10 @@ export function App() {
 
   useEffect(() => {
     const timeoutId = window.setTimeout(() => {
-      setError((current) => current ?? "Twitch authorization is not ready yet. Refresh the extension or check Hosted Test settings.");
+      setError((current) => (!session && current === null ? "Twitch authorization is not ready yet. Refresh the extension or check Hosted Test settings." : current));
     }, 5000);
     return () => window.clearTimeout(timeoutId);
-  }, []);
+  }, [session]);
 
   useEffect(() => {
     if (!session?.token) {
@@ -174,6 +174,7 @@ function DashboardView({
       setState(await createPoll(session, input));
       setQuestion("");
       setOptions(["", ""]);
+      setError(null);
     } catch (err) {
       setError(err instanceof Error ? err.message : t("error"));
     }
@@ -208,7 +209,7 @@ function DashboardView({
             </label>
           ))}
         </div>
-        <button className="secondary" disabled={options.length >= 6} onClick={() => setOptions([...options, ""])}>
+        <button className="secondary addOptionButton" disabled={options.length >= 6} onClick={() => setOptions([...options, ""])}>
           <Plus size={18} />
           {t("addOption")}
         </button>

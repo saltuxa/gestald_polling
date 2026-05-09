@@ -13,7 +13,9 @@ export interface PollStore {
 
 interface ChannelRecord {
   poll: Poll | null;
+  lastClosedPoll: Poll | null;
   votes: Map<string, Vote>;
+  lastClosedVotes: Map<string, Vote>;
 }
 
 export class InMemoryPollStore implements PollStore {
@@ -49,11 +51,14 @@ export class InMemoryPollStore implements PollStore {
       throw new AppError(404, "No active poll");
     }
 
-    record.poll = {
+    record.lastClosedPoll = {
       ...record.poll,
       status: "closed",
       closedAt: new Date().toISOString()
     };
+    record.lastClosedVotes = new Map(record.votes);
+    record.poll = null;
+    record.votes = new Map();
 
     return this.publish(channelId);
   }
@@ -99,32 +104,35 @@ export class InMemoryPollStore implements PollStore {
       return existing;
     }
 
-    const record: ChannelRecord = { poll: null, votes: new Map() };
+    const record: ChannelRecord = { poll: null, lastClosedPoll: null, votes: new Map(), lastClosedVotes: new Map() };
     this.channels.set(channelId, record);
     return record;
   }
 
   private toPublicState(record: ChannelRecord, viewerUserId?: string): PollState {
-    if (!record.poll) {
+    const poll = record.poll ?? record.lastClosedPoll;
+    const voteMap = record.poll ? record.votes : record.lastClosedVotes;
+
+    if (!poll) {
       return { poll: null, counts: {}, voters: [] };
     }
 
-    const counts = Object.fromEntries(record.poll.options.map((option) => [option.id, 0]));
-    const votes = [...record.votes.values()];
+    const counts = Object.fromEntries(poll.options.map((option) => [option.id, 0]));
+    const votes = [...voteMap.values()];
 
     for (const vote of votes) {
       counts[vote.optionId] = (counts[vote.optionId] ?? 0) + 1;
     }
 
-    const viewerVote = viewerUserId ? record.votes.get(viewerUserId) : undefined;
+    const viewerVote = viewerUserId ? voteMap.get(viewerUserId) : undefined;
 
     return {
-      poll: record.poll,
+      poll,
       counts,
       voters: votes.map((vote) => ({
         userId: vote.userId,
         displayName: vote.displayName,
-        optionId: record.poll?.privacyMode === "public_choice" ? vote.optionId : undefined,
+        optionId: poll.privacyMode === "public_choice" ? vote.optionId : undefined,
         createdAt: vote.createdAt
       })),
       viewerVoteOptionId: viewerVote?.optionId

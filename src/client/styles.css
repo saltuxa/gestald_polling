@@ -181,6 +181,10 @@ h2 {
   background: #e8ddff;
 }
 
+.addOptionButton {
+  margin-top: 10px;
+}
+
 .danger {
   background: #ff8f8f;
 }

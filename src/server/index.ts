@@ -8,6 +8,6 @@ if (!process.env.TWITCH_EXTENSION_SECRET) {
 const port = Number(process.env.PORT ?? 3001);
 const app = createApp();
 
-app.listen(port, () => {
+app.listen(port, "0.0.0.0", () => {
   console.log(`Gestald Vote EBS listening on http://localhost:${port}`);
 });

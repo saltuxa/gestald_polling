@@ -1,0 +1,329 @@
+:root {
+  color-scheme: dark;
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #121018;
+  color: #f5f2ff;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 280px;
+  background: #121018;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  border: 0;
+}
+
+main {
+  width: 100%;
+  min-height: 100vh;
+  padding: 14px;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+header > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand {
+  color: #ffffff;
+  font-weight: 800;
+}
+
+.status {
+  border: 1px solid #51476f;
+  border-radius: 999px;
+  color: #cfc6ec;
+  font-size: 12px;
+  line-height: 1;
+  padding: 5px 8px;
+}
+
+.stack {
+  display: grid;
+  gap: 14px;
+}
+
+.compact {
+  gap: 8px;
+}
+
+.poll,
+.panel,
+.empty,
+.voters,
+.results {
+  border: 1px solid #2f2940;
+  border-radius: 8px;
+  background: #191522;
+  padding: 14px;
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+h1 {
+  font-size: 20px;
+  line-height: 1.22;
+}
+
+h2 {
+  font-size: 15px;
+  line-height: 1.3;
+}
+
+.options {
+  display: grid;
+  gap: 8px;
+  margin: 14px 0;
+}
+
+.option {
+  display: grid;
+  gap: 8px;
+  width: 100%;
+  min-height: 76px;
+  padding: 12px;
+  border: 1px solid #37304a;
+  border-radius: 8px;
+  background: #211b2e;
+  color: #f5f2ff;
+  text-align: left;
+}
+
+.option:not(:disabled) {
+  cursor: pointer;
+}
+
+.option.selected {
+  border-color: #75d3b8;
+  background: #1c2a2a;
+}
+
+.optionTop,
+.panelHeader,
+.voter,
+.resultRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.optionTop span,
+.voter span,
+.resultRow span:first-child {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.meter {
+  display: block;
+  width: 100%;
+  height: 7px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #30283f;
+}
+
+.meter span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: #75d3b8;
+}
+
+.primary,
+.secondary,
+.danger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 38px;
+  border-radius: 8px;
+  padding: 9px 12px;
+  color: #101018;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.primary {
+  width: 100%;
+  background: #75d3b8;
+}
+
+.secondary {
+  background: #e8ddff;
+}
+
+.danger {
+  background: #ff8f8f;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.muted {
+  color: #aaa0c2;
+  font-size: 13px;
+}
+
+.center {
+  text-align: center;
+}
+
+.notice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #51476f;
+  border-radius: 8px;
+  background: #211b2e;
+  color: #f5f2ff;
+  padding: 10px;
+}
+
+.notice span {
+  flex: 1;
+}
+
+.notice.error {
+  border-color: #8c4444;
+  background: #2b171b;
+}
+
+.empty {
+  display: grid;
+  gap: 8px;
+  min-height: 160px;
+  align-content: center;
+  text-align: center;
+}
+
+.empty p {
+  color: #aaa0c2;
+}
+
+.dashboardGrid {
+  display: grid;
+  gap: 14px;
+}
+
+label,
+fieldset {
+  display: grid;
+  gap: 7px;
+  color: #cfc6ec;
+  font-size: 13px;
+}
+
+input {
+  width: 100%;
+  min-height: 38px;
+  border: 1px solid #37304a;
+  border-radius: 8px;
+  background: #121018;
+  color: #ffffff;
+  padding: 8px 10px;
+}
+
+fieldset {
+  margin: 12px 0;
+  border: 1px solid #37304a;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+legend {
+  color: #ffffff;
+  padding: 0 5px;
+}
+
+.radioLine {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.radioLine input {
+  width: 16px;
+  min-height: 16px;
+}
+
+.results,
+.voters {
+  margin-top: 12px;
+}
+
+.results {
+  display: grid;
+  gap: 10px;
+}
+
+.resultRow {
+  display: grid;
+  grid-template-columns: 1fr auto;
+}
+
+.resultRow .meter {
+  grid-column: 1 / -1;
+}
+
+.voterList {
+  display: grid;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.voter {
+  min-height: 34px;
+  border-radius: 8px;
+  background: #211b2e;
+  padding: 7px 9px;
+}
+
+.voter strong {
+  color: #75d3b8;
+  font-size: 12px;
+  text-align: right;
+}
+
+@media (min-width: 760px) {
+  main {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .dashboardGrid {
+    grid-template-columns: minmax(280px, 390px) 1fr;
+    align-items: start;
+  }
+}

@@ -10,7 +10,7 @@
     "dev:token": "tsx scripts/create-dev-token.ts",
     "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\"",
     "build": "npm run clean && tsc -p tsconfig.server.json && vite build",
-    "package:extension": "npm run build && powershell -NoProfile -ExecutionPolicy Bypass -Command \"Compress-Archive -Path dist/client/* -DestinationPath dist/gestald-vote-extension.zip -Force\"",
+    "package:extension": "npm run build && powershell -NoProfile -ExecutionPolicy Bypass -Command \"Push-Location dist/client; Compress-Archive -Path * -DestinationPath ../gestald-vote-extension.zip -Force; Pop-Location\"",
     "start": "node dist/server/server/index.js",
     "test": "vitest run",
     "typecheck": "tsc -p tsconfig.server.json --noEmit && tsc -p tsconfig.client.json --noEmit"

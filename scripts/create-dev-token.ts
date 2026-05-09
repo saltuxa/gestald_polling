@@ -26,15 +26,12 @@ if (!secret) {
 
 function normalizeSecret(value: string): Buffer | string {
   const normalized = value.trim();
-  if (/^[A-Za-z0-9+/=]+$/.test(normalized)) {
-    try {
-      return Buffer.from(normalized, "base64");
-    } catch {
-      return normalized;
-    }
+  if (!/^[A-Za-z0-9+/_-]+=*$/.test(normalized)) {
+    return normalized;
   }
 
-  return normalized;
+  const base64 = normalized.replaceAll("-", "+").replaceAll("_", "/").padEnd(Math.ceil(normalized.length / 4) * 4, "=");
+  return Buffer.from(base64, "base64");
 }
 
 const role = args.get("role") ?? process.env.npm_config_role ?? "broadcaster";

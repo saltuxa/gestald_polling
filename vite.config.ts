@@ -8,13 +8,17 @@ export default defineConfig({
   build: {
     outDir: "dist/client",
     emptyOutDir: true,
+    modulePreload: false,
     rollupOptions: {
       input: {
-        index: resolve(__dirname, "index.html"),
-        panel: resolve(__dirname, "panel.html"),
-        mobile: resolve(__dirname, "mobile.html"),
-        config: resolve(__dirname, "config.html"),
-        dashboard: resolve(__dirname, "dashboard.html")
+        index: resolve(__dirname, "index.html")
+      },
+      output: {
+        format: "iife",
+        entryFileNames: "app.js",
+        chunkFileNames: "assets/[name]-[hash].js",
+        assetFileNames: "assets/[name]-[hash][extname]",
+        inlineDynamicImports: true
       }
     }
   },

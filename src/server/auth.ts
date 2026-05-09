@@ -19,26 +19,39 @@ declare global {
   }
 }
 
-function getJwtSecret(): Buffer | string {
+function getJwtSecrets(): Array<Buffer | string> {
   const secret = process.env.TWITCH_EXTENSION_SECRET;
   if (!secret) {
     throw new Error("TWITCH_EXTENSION_SECRET is required");
   }
 
+  return [decodeExtensionSecret(secret), secret.trim()];
+}
+
+export function decodeExtensionSecret(secret: string): Buffer | string {
   const normalized = secret.trim();
-  if (/^[A-Za-z0-9+/=]+$/.test(normalized)) {
-    try {
-      return Buffer.from(normalized, "base64");
-    } catch {
-      return normalized;
-    }
+  if (!/^[A-Za-z0-9+/_-]+=*$/.test(normalized)) {
+    return normalized;
   }
 
-  return normalized;
+  const base64 = normalized.replaceAll("-", "+").replaceAll("_", "/").padEnd(Math.ceil(normalized.length / 4) * 4, "=");
+  return Buffer.from(base64, "base64");
 }
 
 export function verifyExtensionToken(token: string): AuthContext {
-  const payload = jwt.verify(token, getJwtSecret(), { algorithms: ["HS256"] }) as TwitchJwtPayload;
+  let payload: TwitchJwtPayload | null = null;
+  for (const secret of getJwtSecrets()) {
+    try {
+      payload = jwt.verify(token, secret, { algorithms: ["HS256"] }) as TwitchJwtPayload;
+      break;
+    } catch {
+      payload = null;
+    }
+  }
+
+  if (!payload) {
+    throw new AppError(401, "Invalid Twitch extension token");
+  }
 
   if (!payload.channel_id || !payload.role) {
     throw new AppError(401, "Invalid Twitch extension token");

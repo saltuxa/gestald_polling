@@ -21,6 +21,13 @@ export function App() {
   }, []);
 
   useEffect(() => {
+    const timeoutId = window.setTimeout(() => {
+      setError((current) => current ?? "Twitch authorization is not ready yet. Refresh the extension or check Hosted Test settings.");
+    }, 5000);
+    return () => window.clearTimeout(timeoutId);
+  }, []);
+
+  useEffect(() => {
     if (!session?.token) {
       return;
     }
@@ -30,7 +37,11 @@ export function App() {
   }, [session]);
 
   if (!session) {
-    return <Shell title={t("appName")} subtitle={t("loading")} />;
+    return (
+      <Shell title={t("appName")} subtitle={t("loading")}>
+        {error ? <div className="notice error">{error}</div> : null}
+      </Shell>
+    );
   }
 
   return (

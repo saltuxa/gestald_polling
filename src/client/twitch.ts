@@ -45,7 +45,9 @@ export interface ExtensionSession {
 export function onTwitchAuthorized(callback: (session: ExtensionSession) => void) {
   const ext = window.Twitch?.ext;
   if (!ext) {
-    callback(createLocalSession());
+    if (isLocalDev()) {
+      callback(createLocalSession());
+    }
     return;
   }
 
@@ -96,4 +98,8 @@ function createLocalSession(): ExtensionSession {
     role: (params.get("role") as ExtensionRole | null) ?? "broadcaster",
     isLinked: params.get("linked") !== "false"
   };
+}
+
+function isLocalDev() {
+  return window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
 }

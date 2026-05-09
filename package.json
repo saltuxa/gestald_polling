@@ -11,7 +11,7 @@
     "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\"",
     "build": "npm run clean && tsc -p tsconfig.server.json && vite build",
     "package:extension": "npm run build && powershell -NoProfile -ExecutionPolicy Bypass -Command \"Compress-Archive -Path dist/client/* -DestinationPath dist/gestald-vote-extension.zip -Force\"",
-    "start": "node dist/server/index.js",
+    "start": "node dist/server/server/index.js",
     "test": "vitest run",
     "typecheck": "tsc -p tsconfig.server.json --noEmit && tsc -p tsconfig.client.json --noEmit"
   },

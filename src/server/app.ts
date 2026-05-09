@@ -1,6 +1,7 @@
 import cors from "cors";
 import express, { type NextFunction, type Request, type Response } from "express";
 import path from "node:path";
+import fs from "node:fs";
 import { fileURLToPath } from "node:url";
 import { ZodError } from "zod";
 import { requireExtensionAuth } from "./auth.js";
@@ -17,7 +18,7 @@ export function createApp(store: PollStore = new InMemoryPollStore()) {
   app.use("/api", requireExtensionAuth, createApiRouter(store));
 
   const __dirname = path.dirname(fileURLToPath(import.meta.url));
-  const clientDist = path.resolve(__dirname, "../client");
+  const clientDist = resolveClientDist(__dirname);
   app.use(express.static(clientDist));
   app.get(/.*/, (_req, res) => {
     res.sendFile(path.join(clientDist, "index.html"));
@@ -39,4 +40,10 @@ export function createApp(store: PollStore = new InMemoryPollStore()) {
   });
 
   return app;
+}
+
+function resolveClientDist(serverDir: string) {
+  const candidates = [path.resolve(serverDir, "../../client"), path.resolve(serverDir, "../client")];
+  const match = candidates.find((candidate) => fs.existsSync(path.join(candidate, "index.html")));
+  return match ?? candidates[0];
 }

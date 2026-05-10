@@ -40,6 +40,11 @@ Client dev server: `http://localhost:5173`
 
 EBS API: `http://localhost:3001`
 
+Public legal pages:
+
+- `/terms.html`
+- `/privacy.html`
+
 ## Local Testing Without Twitch
 
 Generate a local broadcaster token:
